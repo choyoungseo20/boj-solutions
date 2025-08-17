@@ -9,6 +9,8 @@ unordered_map<string, string> hash_map;
 bool possible = false;
 
 void dfs(string s1, string s2) {
+    if (possible) return;
+
     auto n = hash_map.find(s1);
     if (n != hash_map.end()) {
         if (n->second == s2) possible = true;
@@ -17,6 +19,9 @@ void dfs(string s1, string s2) {
 }
 
 int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+
     int N;
     cin >> N;
 
