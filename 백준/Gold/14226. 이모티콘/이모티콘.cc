@@ -3,7 +3,7 @@
 
 using namespace std;
 
-bool visited[2001][2001];
+bool visited[1001][1001];
 
 int main() {
     int S;
@@ -28,7 +28,7 @@ int main() {
             visited[emoticon_num][emoticon_num] = true;
             q.push({ {emoticon_num, emoticon_num}, time + 1 });
         }
-        if (emoticon_num + clipboard_num <= 2000 && clipboard_num != 0 && !visited[emoticon_num + clipboard_num][clipboard_num]) {
+        if (emoticon_num + clipboard_num <= 1000 && !visited[emoticon_num + clipboard_num][clipboard_num]) {
             visited[emoticon_num + clipboard_num][clipboard_num] = true;
             q.push({ {emoticon_num + clipboard_num, clipboard_num}, time + 1 });
         }
