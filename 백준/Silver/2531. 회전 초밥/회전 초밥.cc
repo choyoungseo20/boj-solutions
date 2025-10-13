@@ -7,14 +7,13 @@ int main() {
 	int N, d, k, c;
 	cin >> N >> d >> k >> c;
 	
-	vector<int> v(2 * N);
+	vector<int> v(N);
 	vector<int> cnt(d + 1, 0);
 
 	cnt[c]++;
 	int eat_cnt = 1;
 	for (int i = 0; i < N; i++) {
 		cin >> v[i];
-		v[N + i] = v[i];
 
 		if (i < k) {
 			if (cnt[v[i]] == 0) {
@@ -34,11 +33,11 @@ int main() {
 		cnt[v[i]]--;
 		if (cnt[v[i]] == 0) eat_cnt--;
 
-		if (cnt[v[i + k]] == 0) {
+		if (cnt[v[(i + k) % N]] == 0) {
 			eat_cnt++;
 			ans = max(ans, eat_cnt);
 		}
-		cnt[v[i + k]]++;
+		cnt[v[(i + k) % N]]++;
 		
 		i++;
 	}
