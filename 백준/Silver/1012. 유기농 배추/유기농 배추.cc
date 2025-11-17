@@ -1,54 +1,63 @@
 #include <iostream>
+#include <queue>
 #include <cstring>
 
 using namespace std;
 
 int M, N;
 
-int dx[4] = {-1, 1, 0, 0};
-int dy[4] = {0, 0, -1, 1};
+int dx[4] = { -1, 1, 0, 0 };
+int dy[4] = { 0, 0, -1, 1 };
 
-bool baechu[51][51] = {false};
-bool check[51][51] = {false};
-
-void dfs(int x, int y) {
-    check[x][y] = true;
-    
-    for (int i = 0; i < 4; i++) {
-        int m_x = x + dx[i];
-        int m_y = y + dy[i];
-        
-        if (m_x < 0 || m_y < 0 || m_x >= N || m_y >= M) continue;
-        if (check[m_x][m_y] == false && baechu[m_x][m_y] == true) dfs(m_x, m_y);
-    }
-}
+bool arr[51][51];
+bool check[51][51];
 
 int main() {
     int T, K, X, Y;
-    
+
     cin >> T;
-    
+
     while (T--) {
         cin >> M >> N >> K;
-        
+
         for (int i = 0; i < K; i++) {
             cin >> X >> Y;
-            baechu[Y][X] = true;
+            arr[Y][X] = true;
         }
-        
+
         int count = 0;
+        queue<pair<int, int>> q;
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < M; j++) {
-                if (check[i][j] == false && baechu[i][j] == true) {
-                    dfs(i, j);
+                if (check[i][j] == false && arr[i][j] == true) {
+                    check[i][j] = true;
                     count++;
+                    q.push({ i, j });
+                    while (!q.empty()) {
+                        int x = q.front().first;
+                        int y = q.front().second;
+                        q.pop();
+
+                        for (int k = 0; k < 4; k++) {
+                            int nx = x + dx[k];
+                            int ny = y + dy[k];
+                            if (nx >= 0 && nx < N && ny >= 0 && ny < M) {
+                                if (arr[nx][ny]) { 
+                                    if (!check[nx][ny]) {
+                                        check[nx][ny] = true;
+                                        q.push({ nx, ny });
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
-        
+
         cout << count << "\n";
-        
-        memset(baechu, false, sizeof(baechu));
+
+        memset(arr, false, sizeof(arr));
         memset(check, false, sizeof(check));
     }
 }
