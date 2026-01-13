@@ -357,9 +357,6 @@ string calculate(string str, int idx) {
 		}
 		else if (is_left_bracket(str[i])) {
 			num = calculate(str, i + 1);
-			if (num == "ROCK") {
-				return "ROCK";
-			}
 		}
 		else if (is_right_bracket(str[i])) {
 			break;
