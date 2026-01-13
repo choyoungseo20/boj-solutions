@@ -6,9 +6,6 @@
 
 using namespace std;
 
-bool visited[1001];
-bool divide_zero;
-
 bool is_digit(char c) {
 	return 0 <= c - '0' && c - '0' <= 9;
 }
@@ -29,13 +26,13 @@ bool validate(string str) {
 	int validate_brackets = 0;
 	bool possible = true;
 	int last_char_state = 1; // 0은 number, 1은 op, 2는 left bracket, 3은 right bracket
-							 // 제일 처음에는 number or left bracket만 올 수 있음 -> op와 같음
+	// 제일 처음에는 number or left bracket만 올 수 있음 -> op와 같음
 
 	for (int i = 0; i < str.size(); i++) {
 		char current_char = str[i];
 
 		// number 다음에는 number or op or right bracket만 올 수 있음
-		if (last_char_state == 0) { 
+		if (last_char_state == 0) {
 			if (is_digit(current_char)) {
 				last_char_state = 0;
 			}
@@ -129,7 +126,7 @@ bool is_smaller(string num1, string num2) {
 
 	if (num1.size() != num2.size())
 		return num1.size() < num2.size();
-	return num1 < num2; 
+	return num1 < num2;
 }
 
 string add(string num1, string num2) {
@@ -240,7 +237,7 @@ string calculate_op(string num1, string num2, char op) {
 		}
 
 		res = add(num1, num2);
-		
+
 		if (is_minus) {
 			res = "-" + res;
 		}
@@ -307,8 +304,7 @@ string calculate_op(string num1, string num2, char op) {
 		}
 
 		if (delete_zero(num2) == "0") {
-			divide_zero = true;
-			return "error";
+			return "ROCK";
 		}
 
 		res = div(num1, num2);
@@ -320,6 +316,8 @@ string calculate_op(string num1, string num2, char op) {
 
 	return res;
 }
+
+bool visited[1001];
 
 string calculate(string str, int idx) {
 	stack<string> number;
@@ -345,11 +343,11 @@ string calculate(string str, int idx) {
 				num1 = delete_zero(num1);
 				num2 = delete_zero(num2);
 				string new_num = calculate_op(num1, num2, op.top());
-				if (new_num == "error") {
-					return "error";
+				if (new_num == "ROCK") {
+					return "ROCK";
 				}
 				number.push(new_num);
-				
+
 				op.pop();
 				op.push(str[i]);
 			}
@@ -359,15 +357,14 @@ string calculate(string str, int idx) {
 		}
 		else if (is_left_bracket(str[i])) {
 			num = calculate(str, i + 1);
-			if (num == "error") {
-				return "error";
+			if (num == "ROCK") {
+				return "ROCK";
 			}
 		}
 		else if (is_right_bracket(str[i])) {
 			break;
 		}
 	}
-	if (divide_zero) return "error";
 
 	number.push(num);
 	num = "0";
@@ -390,8 +387,8 @@ string calculate(string str, int idx) {
 			else num1 = "-" + num1;
 		}
 		string new_num = calculate_op(num1, num2, o);
-		if (new_num == "error") {
-			return "error";
+		if (new_num == "ROCK") {
+			return "ROCK";
 		}
 		number.push(new_num);
 	}
@@ -402,7 +399,7 @@ string calculate(string str, int idx) {
 int main() {
 	string str;
 	cin >> str;
-	
+
 	bool possible = validate(str);
 
 	if (!possible) {
@@ -412,6 +409,5 @@ int main() {
 
 	string ans = calculate(str, 0);
 
-	if (divide_zero) cout << "ROCK";
-	else cout << ans;
+	cout << ans;
 }
