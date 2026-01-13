@@ -6,6 +6,16 @@
 
 using namespace std;
 
+/*
+데이터를 추가해 주세요.
+
+101912924번 제출이 통과합니다.
+
+Input 1+(1/0)
+Output 37318
+Answer ROCK
+*/
+
 bool is_digit(char c) {
 	return 0 <= c - '0' && c - '0' <= 9;
 }
@@ -22,16 +32,20 @@ bool is_right_bracket(char c) {
 	return c == ')';
 }
 
-bool validate(string str) {
-	int validate_brackets = 0;
+bool validate(string expr) {
 	bool possible = true;
-	int last_char_state = 1; // 0은 number, 1은 op, 2는 left bracket, 3은 right bracket
+
+	// 열린 소괄호 개수
+	int open_bracket_cnt = 0;
+
+	// 0은 number, 1은 op, 2는 left bracket, 3은 right bracket
 	// 제일 처음에는 number or left bracket만 올 수 있음 -> op와 같음
+	int last_char_state = 1; 
 
-	for (int i = 0; i < str.size(); i++) {
-		char current_char = str[i];
+	for (int i = 0; i < expr.size(); i++) {
+		char current_char = expr[i];
 
-		// number 다음에는 number or op or right bracket만 올 수 있음
+		// number 다음에는 digit 또는 op 또는 right bracket 가능
 		if (last_char_state == 0) {
 			if (is_digit(current_char)) {
 				last_char_state = 0;
@@ -41,8 +55,8 @@ bool validate(string str) {
 			}
 			else if (is_right_bracket(current_char)) {
 				last_char_state = 3;
-				if (validate_brackets > 0) {
-					validate_brackets--;
+				if (open_bracket_cnt > 0) {
+					open_bracket_cnt--;
 				}
 				else {
 					possible = false;
@@ -54,30 +68,30 @@ bool validate(string str) {
 				break;
 			}
 		}
-		// op 다음에는 number or left bracket만 올 수 있음
-		// left bracket 다음에는 number or left bracket만 올 수 있음
+		// op 다음에는 digit 또는 left bracket 가능
+		// left bracket 다음에는 digit 또는 left bracket 가능
 		else if (last_char_state == 1 || last_char_state == 2) {
 			if (is_digit(current_char)) {
 				last_char_state = 0;
 			}
 			else if (is_left_bracket(current_char)) {
 				last_char_state = 2;
-				validate_brackets++;
+				open_bracket_cnt++;
 			}
 			else {
 				possible = false;
 				break;
 			}
 		}
-		// right bracket 다음에는 op or right bracket만 올 수 있음
+		// right bracket 다음에는 op or right bracket 가능
 		else if (last_char_state == 3) {
 			if (is_op(current_char)) {
 				last_char_state = 1;
 			}
 			else if (is_right_bracket(current_char)) {
 				last_char_state = 3;
-				if (validate_brackets > 0) {
-					validate_brackets--;
+				if (open_bracket_cnt > 0) {
+					open_bracket_cnt--;
 				}
 				else {
 					possible = false;
@@ -91,22 +105,19 @@ bool validate(string str) {
 		}
 	}
 
-	if (!possible || validate_brackets != 0 || last_char_state == 1 || last_char_state == 2) {
+	// 불가능한 식 조합 || 열린 소괄호 || op로 끝날 경우 || left_bracket로 끝날 경우
+	if (!possible || open_bracket_cnt != 0 || last_char_state == 1 || last_char_state == 2) {
 		return false;
 	}
 	return true;
 }
 
+// 음수가 아닌 수의 불필요한 0 제거
 string delete_zero(string num) {
-	bool is_minus = false;
-
-	if (!num.empty() && num[0] == '-') {
-		is_minus = true;
-		num = num.substr(1);
-	}
-
 	bool is_zero = true;
+
 	string res;
+
 	for (int i = 0; i < num.size(); i++) {
 		if (num[i] != '0') {
 			is_zero = false;
@@ -116,19 +127,17 @@ string delete_zero(string num) {
 	}
 
 	if (is_zero) return "0";
-	if (is_minus) return "-" + res;
 	return res;
 }
 
+// 음수가 아닌 두 수에서 num1이 num2보다 작은지 판단
 bool is_smaller(string num1, string num2) {
-	num1 = delete_zero(num1);
-	num2 = delete_zero(num2);
-
 	if (num1.size() != num2.size())
 		return num1.size() < num2.size();
 	return num1 < num2;
 }
 
+// 음수가 아닌 두 수의 덧셈
 string add(string num1, string num2) {
 	int i = num1.size() - 1;
 	int j = num2.size() - 1;
@@ -147,9 +156,11 @@ string add(string num1, string num2) {
 	}
 
 	reverse(res.begin(), res.end());
-	return delete_zero(res);
+
+	return res;
 }
 
+// 음수가 아닌 두 수의 뺄셈, num1 > num2
 string sub(string num1, string num2) {
 	int i = num1.size() - 1;
 	int j = num2.size() - 1;
@@ -177,10 +188,12 @@ string sub(string num1, string num2) {
 	return delete_zero(res);
 }
 
+// 음수가 아닌 두 수의 곱셈
 string mul(string num1, string num2) {
 	if (num1 == "0" || num2 == "0") return "0";
 
-	int n = num1.size(), m = num2.size();
+	int n = num1.size();
+	int m = num2.size();
 	vector<int> v(n + m, 0);
 
 	for (int i = n - 1; i >= 0; i--) {
@@ -193,13 +206,18 @@ string mul(string num1, string num2) {
 	}
 
 	string res;
+
 	int i = 0;
 	while (i < v.size() && v[i] == 0) i++;
-	for (; i < v.size(); i++) res.push_back(v[i] + '0');
+	while (i < v.size()) {
+		res.push_back(v[i] + '0');
+		i++;
+	}
 
-	return delete_zero(res);
+	return res;
 }
 
+// 음수가 아닌 두 수의 나눗셈
 string div(string num1, string num2) {
 	string cur = "";
 	string res = "";
@@ -220,10 +238,10 @@ string div(string num1, string num2) {
 }
 
 string calculate_op(string num1, string num2, char op) {
+	bool is_minus = false;
 	string res;
 
 	if (op == '+') {
-		bool is_minus = false;
 		if (num1[0] != '-' && num2[0] == '-') {
 			return calculate_op(num1, num2.substr(1), '-');
 		}
@@ -236,14 +254,12 @@ string calculate_op(string num1, string num2, char op) {
 			num2 = num2.substr(1);
 		}
 
-		res = add(num1, num2);
+		num1 = delete_zero(num1);
+		num2 = delete_zero(num2);
 
-		if (is_minus) {
-			res = "-" + res;
-		}
+		res = add(num1, num2);
 	}
 	else if (op == '-') {
-		bool is_minus = false;
 		if (num1[0] != '-' && num2[0] == '-') {
 			return calculate_op(num1, num2.substr(1), '+');
 		}
@@ -254,21 +270,19 @@ string calculate_op(string num1, string num2, char op) {
 			return calculate_op(num2.substr(1), num1.substr(1), '-');
 		}
 
+		num1 = delete_zero(num1);
+		num2 = delete_zero(num2);
+
 		if (is_smaller(num1, num2)) {
 			is_minus = true;
 			string tmp = num1;
 			num1 = num2;
 			num2 = tmp;
 		}
-
+		
 		res = sub(num1, num2);
-
-		if (is_minus) {
-			res = "-" + res;
-		}
 	}
 	else if (op == '*') {
-		bool is_minus = false;
 		if (num1[0] != '-' && num2[0] == '-') {
 			is_minus = true;
 			num2 = num2.substr(1);
@@ -281,15 +295,13 @@ string calculate_op(string num1, string num2, char op) {
 			num1 = num1.substr(1);
 			num2 = num2.substr(1);
 		}
+
+		num1 = delete_zero(num1);
+		num2 = delete_zero(num2);
 
 		res = mul(num1, num2);
-
-		if (is_minus) {
-			res = "-" + res;
-		}
 	}
 	else if (op == '/') {
-		bool is_minus = false;
 		if (num1[0] != '-' && num2[0] == '-') {
 			is_minus = true;
 			num2 = num2.substr(1);
@@ -303,18 +315,18 @@ string calculate_op(string num1, string num2, char op) {
 			num2 = num2.substr(1);
 		}
 
-		if (delete_zero(num2) == "0") {
+		num1 = delete_zero(num1);
+		num2 = delete_zero(num2);
+
+		if (num2 == "0") {
 			return "ROCK";
 		}
 
 		res = div(num1, num2);
-
-		if (is_minus) {
-			res = "-" + res;
-		}
 	}
 
-	return res;
+	if (is_minus) return "-" + res;
+	else return res;
 }
 
 bool visited[1001];
@@ -340,8 +352,6 @@ string calculate(string str, int idx) {
 				string num1 = number.top();
 				number.pop();
 
-				num1 = delete_zero(num1);
-				num2 = delete_zero(num2);
 				string new_num = calculate_op(num1, num2, op.top());
 				if (new_num == "ROCK") {
 					return "ROCK";
@@ -357,6 +367,9 @@ string calculate(string str, int idx) {
 		}
 		else if (is_left_bracket(str[i])) {
 			num = calculate(str, i + 1);
+			if (num == "ROCK") {
+				return "ROCK";
+			}
 		}
 		else if (is_right_bracket(str[i])) {
 			break;
@@ -394,17 +407,17 @@ string calculate(string str, int idx) {
 }
 
 int main() {
-	string str;
-	cin >> str;
+	string expr;
+	cin >> expr;
 
-	bool possible = validate(str);
+	bool possible = validate(expr);
 
 	if (!possible) {
 		cout << "ROCK";
 		return 0;
 	}
 
-	string ans = calculate(str, 0);
+	string ans = calculate(expr, 0);
 
 	cout << ans;
 }
