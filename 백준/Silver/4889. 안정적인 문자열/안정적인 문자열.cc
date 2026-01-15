@@ -28,6 +28,9 @@ int make_stable_string(string str) {
 }
 
 int main() {
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+
 	int i = 1;
 	while (1) {
 		string data;
