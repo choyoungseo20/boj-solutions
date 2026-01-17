@@ -1,74 +1,29 @@
 #include <iostream>
-#include <algorithm>
-#include <vector>
 
 using namespace std;
-
-long long calculate(vector<int> v, long long sum) {
-	if (v.size() == 1) return sum;
-
-	int last_value = -1;
-	int state = 0; // 0: start, 1: rise, 2: descent
-	vector<int> min_max_value;
-	for (int i = 0; i < v.size(); i++) {
-		if (last_value == v[i]) continue;
-
-		if (i == 0) {
-			min_max_value.push_back(v[i]);
-		}
-		else {
-			if ((state == 1 && last_value > v[i])
-				|| (state == 2 && last_value < v[i])) min_max_value.push_back(last_value);
-
-			if (last_value < v[i]) state = 1;
-			else state = 2;
-		}
-
-		last_value = v[i];
-	}
-
-	if (last_value != -1) min_max_value.push_back(last_value);
-
-	if (min_max_value.size() == 1) return sum;
-
-	bool odd = true;
-	if (min_max_value[0] < min_max_value[1]) odd = false;
-
-	vector<int> new_v;
-	for (int i = 0; i < min_max_value.size(); i++) {
-		if ((odd && i % 2 == 0)
-			|| (!odd && i % 2 != 0)) {
-			new_v.push_back(min_max_value[i]);
-			continue;
-		}
-
-		if (i == 0) {
-			sum += min_max_value[i + 1] - min_max_value[i];
-		}
-		else if (i == min_max_value.size() - 1) {
-			sum += min_max_value[i - 1] - min_max_value[i];
-		}
-		else {
-			if (min_max_value[i + 1] - min_max_value[i] <= min_max_value[i - 1] - min_max_value[i]) {
-				sum += min_max_value[i + 1] - min_max_value[i];
-			}
-			else {
-				sum += min_max_value[i - 1] - min_max_value[i];
-			}
-		}
-	}
-
-	return calculate(new_v, sum);
-}
 
 int main() {
 	int n;
 	cin >> n;
 
-	vector<int> a(n);
+	long long ans = 0;
+	int a, last_a, max_a;
 	for (int i = 0; i < n; i++) {
-		cin >> a[i];
+		cin >> a;
+
+		if (i == 0) {
+			max_a = a;
+		}
+		else {
+			if (last_a < a) {
+				ans += a - last_a;
+			}
+			if (max_a < a) max_a = a;
+		}
+
+		last_a = a;
 	}
 
-	cout << calculate(a, 0);
+	ans += max_a - last_a;
+	cout << ans;
 }
