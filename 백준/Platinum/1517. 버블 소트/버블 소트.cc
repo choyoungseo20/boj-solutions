@@ -14,6 +14,7 @@ vector<int> merge_sort(vector<int> v) {
 
 	int i = 0, j = 0;
 	vector<int> res;
+	res.reserve(l.size() + r.size());
 	while (i < l.size() && j < r.size()) {
 		if (l[i] > r[j]) {
 			res.push_back(r[j]);
@@ -38,6 +39,9 @@ vector<int> merge_sort(vector<int> v) {
 }
 
 int main() {
+	ios_base::sync_with_stdio(false);
+	cin.tie(nullptr);
+
 	int n;
 	cin >> n;
 
