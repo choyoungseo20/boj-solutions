@@ -1,33 +1,10 @@
 #include <iostream>
-#include <string>
 #include <algorithm>
 #include <vector>
 
 using namespace std;
 
-string add(string a, string b) {
-	int i = a.size() - 1;
-	int j = b.size() - 1;
-	int carry = 0;
-
-	string res = "";
-
-	while (i >= 0 || j >= 0 || carry) {
-		int sum = carry;
-
-		if (i >= 0) sum += a[i--] - '0';
-		if (j >= 0) sum += b[j--] - '0';
-
-		res.push_back(char('0' + (sum % 10)));
-		carry = sum / 10;
-	}
-
-	reverse(res.begin(), res.end());
-
-	return res;
-}
-
-string calculate(vector<int> v, string sum) {
+long long calculate(vector<int> v, long long sum) {
 	if (v.size() == 1) return sum;
 
 	int last_value = -1;
@@ -66,17 +43,17 @@ string calculate(vector<int> v, string sum) {
 		}
 
 		if (i == 0) {
-			sum = add(sum, to_string(min_max_value[i + 1] - min_max_value[i]));
+			sum += min_max_value[i + 1] - min_max_value[i];
 		}
 		else if (i == min_max_value.size() - 1) {
-			sum = add(sum, to_string(min_max_value[i - 1] - min_max_value[i]));
+			sum += min_max_value[i - 1] - min_max_value[i];
 		}
 		else {
 			if (min_max_value[i + 1] - min_max_value[i] <= min_max_value[i - 1] - min_max_value[i]) {
-				sum = add(sum, to_string(min_max_value[i + 1] - min_max_value[i]));
+				sum += min_max_value[i + 1] - min_max_value[i];
 			}
 			else {
-				sum = add(sum, to_string(min_max_value[i - 1] - min_max_value[i]));
+				sum += min_max_value[i - 1] - min_max_value[i];
 			}
 		}
 	}
@@ -93,5 +70,5 @@ int main() {
 		cin >> a[i];
 	}
 
-	cout << calculate(a, "0");
+	cout << calculate(a, 0);
 }
