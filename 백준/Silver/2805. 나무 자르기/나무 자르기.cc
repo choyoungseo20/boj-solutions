@@ -1,39 +1,36 @@
 #include <iostream>
 #include <vector>
+#include <algorithm>
 
 using namespace std;
 
 int main() {
+	ios_base::sync_with_stdio(false);
+	cin.tie(nullptr);
+
 	int n, m;
 	cin >> n >> m;
 
-	vector<int> v(n);
-	int max_tree = 0;
-	for (int i = 0; i < n; i++) {
+	vector<int> v(n + 1);
+	long long sum = 0;
+	for (int i = 1; i <= n; i++) {
 		cin >> v[i];
-		max_tree = max(max_tree, v[i]);
+		sum += v[i];
 	}
 
-	int l = 0;
-	int r = max_tree;
-	int ans = 0;
-	while (l <= r) {
-		int mid = (l + r) / 2;
-		long long tmp = 0;
-		for (int i = 0; i < n; i++) {
-			if (v[i] > mid) {
-				tmp += v[i] - mid;
-				if (tmp >= m) break;
-			}
-		}
-		if (tmp >= m) {
-			ans = max(ans, mid);
-			l = mid + 1;
-		}
-		else {
-			r = mid - 1;
+	sort(v.begin(), v.end());
+
+	int idx = 1;
+	for (int i = 1; i <= n; i++) {
+		sum -= 1LL * (v[i] - v[i - 1]) * (n - i + 1);
+		if (m > sum) {
+			idx = i;
+			break;
 		}
 	}
+	
+	int dist = (m - sum) / (n - idx + 1);
+	if ((m - sum) % (n - idx + 1) != 0) dist++;
 
-	cout << ans;
+	cout << v[idx] - dist;
 }
