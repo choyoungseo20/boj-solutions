@@ -24,7 +24,6 @@ void bfs(int max_move) {
 		int y = q.front().second.second;
 		q.pop();
 
-		vector<pair<int, pair<int, int>>> v[4];
 		for (int i = 0; i < 4; i++) {
 			for (int j = 1; j <= max_move; j++) {
 				int nx = x + j * dx[i];
@@ -36,18 +35,11 @@ void bfs(int max_move) {
 								ans = dist + 1;
 								return;
 							}
-							v[i].push_back({ dist + 1, {nx, ny} });
+							q.push({ dist + 1, {nx, ny} });
 							d[nx][ny] = dist + 1;
 						}
 					}
 					else break;
-				}
-			}
-		}
-		for (int j = max_move - 1; j >= 0; j--) {
-			for (int i = 0; i < 4; i++) {
-				if (j < v[i].size()) {
-					q.push(v[i][j]);
 				}
 			}
 		}
