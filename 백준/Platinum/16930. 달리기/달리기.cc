@@ -13,17 +13,15 @@ int d[1001][1001];
 int ans = -1;
 
 void bfs(int max_move) {
-	vector<pair<int, pair<int, int>>> q;
-	q.reserve(1000000);
-	q.push_back({ 0, {x_1, y_1} });
+	queue<pair<int, pair<int, int>>> q;
+	q.push({ 0, {x_1, y_1} });
 	d[x_1][y_1] = 0;
-	int head = 0;
 
-	while (head < q.size()) {
-		int dist = q[head].first;
-		int x = q[head].second.first;
-		int y = q[head].second.second;
-		head++;
+	while (!q.empty()) {
+		int dist = q.front().first;
+		int x = q.front().second.first;
+		int y = q.front().second.second;
+		q.pop();
 
 		for (int i = 0; i < 4; i++) {
 			for (int j = 1; j <= max_move; j++) {
@@ -36,12 +34,14 @@ void bfs(int max_move) {
 								ans = dist + 1;
 								return;
 							}
-							q.push_back({ dist + 1, {nx, ny} });
+							q.push({ dist + 1, {nx, ny} });
 							d[nx][ny] = dist + 1;
 						}
+						else if (d[nx][ny] < dist + 1) break;
 					}
 					else break;
 				}
+				else break;
 			}
 		}
 	}
