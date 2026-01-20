@@ -29,7 +29,7 @@ int main() {
 	int ans = -1;
 
 	vector<pair<int, pair<int, int>>> q;
-	q.reserve(1000000);
+	q.reserve(n * m);
 	q.push_back({ 0, {x_1, y_1} });
 	d[x_1][y_1] = 0;
 	int head = 0;
