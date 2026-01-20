@@ -62,6 +62,7 @@ int main() {
 
 	cin >> x_1 >> y_1 >> x_2 >> y_2;
 
+	/*
 	bfs(1);
 	if (ans == -1 || k == 1) {
 		cout << ans;
@@ -73,6 +74,7 @@ int main() {
 			d[i][j] = 987654321;
 		}
 	}
+	*/
 	bfs(k);
 
 	cout << ans;
