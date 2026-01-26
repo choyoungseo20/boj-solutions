@@ -18,12 +18,7 @@ bool comp(pair<int, int> a, pair<int, int> b) {
 
 	long long value = 1LL * (x1 - x2) * (y1 - y3) - 1LL * (x1 - x3) * (y1 - y2);
 
-	if (value == 0) {
-		return 1LL * (x1 - x2) * (x1 - x2) + 1LL * (y1 - y2) * (y1 - y2) < 1LL * (x1 - x3) * (x1 - x3) + 1LL * (y1 - y3) * (y1 - y3);
-	}
-	else {
-		return value > 0;
-	}
+	return value > 0;
 }
 
 bool comp2(pair<int, int> a, pair<int, int> b) {
