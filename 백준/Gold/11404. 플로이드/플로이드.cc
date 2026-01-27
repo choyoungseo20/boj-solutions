@@ -14,7 +14,7 @@ int main() {
 
 	for (int i = 1; i <= n; i++) {
 		for (int j = 1; j <= n; j++) {
-			if (i == j) dist[i][j] = 0;
+			if (i == j) dist[i][j] == 0;
 			else dist[i][j] = 987654321;
 		}
 	}
@@ -26,14 +26,10 @@ int main() {
 		dist[u][v] = min(dist[u][v], c);
 	}
 
-	for (int x = 1; x <= n; x++) {
+	for (int k = 1; k <= n; k++) {
 		for (int i = 1; i <= n; i++) {
 			for (int j = 1; j <= n; j++) {
-				if (i == j) continue;
-
-				for (int k = 1; k <= n; k++) {
-					dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j]);
-				}
+				dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j]);
 			}
 		}
 	}
