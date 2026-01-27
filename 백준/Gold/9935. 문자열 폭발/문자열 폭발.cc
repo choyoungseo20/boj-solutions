@@ -1,7 +1,6 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <stack>
 
 using namespace std;
 
@@ -41,15 +40,9 @@ int main() {
 			l_c = c;
 		}
 
-		if (last_idx[c] > 0) {
-			bomb_idx_cnt[i] = bomb_idx_cnt[last_idx[c] - 1] + 1;
-		}
-		else {
-			bomb_idx_cnt[i] = 1;
-		}
-
-		last_idx[c] = i + 1;
 		bomb_char_cnt[c]++;
+
+		bomb_idx_cnt[i] = bomb_char_cnt[c];
 	}
 
 	bool is_bomb = false;
