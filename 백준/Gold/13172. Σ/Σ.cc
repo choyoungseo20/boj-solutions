@@ -2,7 +2,7 @@
 
 using namespace std;
 
-long long ex_gcd(long long a, long long b) {
+long long gcd(long long a, long long b) {
 	long long n = b;
 
 	while (n) {
@@ -17,14 +17,13 @@ long long ex_gcd(long long a, long long b) {
 long long find_cnt(long long q1, long long q2, int r) {
 	if (q1 == 1) return q2 + r;
 
-	long long md = q2 % q1;
+	long long mod = q2 % q1;
 
-	long long tmp_n = find_cnt(md, q1, r * -1);
-	long long n = ((q1 * tmp_n - r) / md) % q1;
+	long long tmp_n = find_cnt(mod, q1, r * -1);
+	long long n = ((q1 * tmp_n - r) / mod) % q1;
 
 	return n;
 }
-
 
 int main() {
 	ios_base::sync_with_stdio(false);
@@ -40,9 +39,9 @@ int main() {
 	for (int i = 0; i < m; i++) {
 		cin >> n >> s;
 
-		long long gcd = ex_gcd(n, s);
-		n /= gcd;
-		s /= gcd;
+		long long d = gcd(n, s);
+		n /= d;
+		s /= d;
 
 		long long cnt = find_cnt(n, mod % n, 1);
 		long long inverse_n = ((mod * cnt + 1) / n) % mod;
