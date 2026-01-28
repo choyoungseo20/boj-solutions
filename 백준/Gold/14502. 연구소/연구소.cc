@@ -67,12 +67,12 @@ int main() {
 		}
 	}
 
-	for (int w1 = 0; w1 < n * m; w1++) {
+	for (int w1 = 0; w1 < n * m - 2; w1++) {
 		int x1 = w1 / m, y1 = w1 % m;
 		if (map[x1][y1] != 0) continue;
 
 		map[x1][y1] = 1;
-		for (int w2 = w1 + 1; w2 < n * m; w2++) {
+		for (int w2 = w1 + 1; w2 < n * m - 1; w2++) {
 			int x2 = w2 / m, y2 = w2 % m;
 			if (map[x2][y2] != 0) continue;
 
@@ -80,10 +80,9 @@ int main() {
 			for (int w3 = w2 + 1; w3 < n * m; w3++) {
 				int x3 = w3 / m, y3 = w3 % m;
 				if (map[x3][y3] != 0) continue;
+
 				map[x3][y3] = 1;
-
 				bfs();
-
 				map[x3][y3] = 0;
 			}
 			map[x2][y2] = 0;
