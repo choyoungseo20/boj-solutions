@@ -4,8 +4,6 @@
 
 using namespace std;
 
-const int INF = 987654321;
-
 struct Node {
 	int s;
 	int e;
@@ -24,13 +22,11 @@ void bellman_ford(int n) {
 
 	for (int i = 1; i <= n - 1; i++) {
 		for (auto n : graph) {
-			if (dist[n.s] == INF) continue;
 			dist[n.e] = min(dist[n.e], dist[n.s] + n.t);
 		}
 	}
 
 	for (auto n : graph) {
-		if (dist[n.s] == INF) continue;
 		if (dist[n.e] > dist[n.s] + n.t) {
 			m_cycle = true;
 			return;
