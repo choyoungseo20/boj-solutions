@@ -27,9 +27,9 @@ bool check(int i, int j, int k) {
 	return check_sq(i, j, k) && check_row(j, k) && check_column(i, k);
 }
 
-bool rec() {
-	for (int i = 0; i < 9; i++) {
-		for (int j = 0; j < 9; j++) {
+bool rec(int x, int y) {
+	for (int i = x; i < 9; i++) {
+		for (int j = y; j < 9; j++) {
 			if (map[i][j] == '0') {
 				bool possible = false;
 				for (int k = 1; k <= 9; k++) {
@@ -42,7 +42,7 @@ bool rec() {
 						visited[map[i][j] - '0'][j][1] = true;
 						visited[map[i][j] - '0'][i][2] = true;
 
-						possible = rec();
+						possible = rec(i + (j + 1) / 9, (j + 1) % 9);
 
 						if (possible) return true;
 						else {
@@ -58,6 +58,7 @@ bool rec() {
 				}
 			}
 		}
+		y = 0;
 	}
 
 	return true;
@@ -79,7 +80,7 @@ int main() {
 		}
 	}
 
-	if (rec()) {
+	if (rec(0, 0)) {
 		for (int i = 0; i < 9; i++) {
 			for (int j = 0; j < 9; j++) {
 				cout << map[i][j];
