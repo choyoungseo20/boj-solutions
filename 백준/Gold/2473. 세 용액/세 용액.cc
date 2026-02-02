@@ -18,36 +18,27 @@ int main() {
 	sort(v.begin(), v.end());
 
 	vector<int> ans(3);
-	long long sum = 3000000000;
-	for (int i = 0; i < n - 2; i++) {
-		for (int j = i + 2; j < n; j++) {
-			int l = i + 1;
-			int r = j - 1;
+	long long sum = 3000000001;
+	for (int k = 0; k < n - 2; k++) {
+		int i = k + 1;
+		int j = n - 1;
 
-			while (l <= r) {
-				int mid = (l + r) / 2;
+		while (i < j) {
+			long long s = 1LL * v[k] + 1LL * v[i] + 1LL * v[j];
 
-				long long s = 1LL * v[i] + 1LL * v[j] + 1LL * v[mid];
+			if (sum > llabs(s)) {
+				ans[0] = v[k];
+				ans[1] = v[i];
+				ans[2] = v[j];
 
-				if (sum > llabs(s)) {
-					ans[0] = v[i];
-					ans[1] = v[mid];
-					ans[2] = v[j];
+				sum = llabs(s);
+			}
 
-					sum = llabs(s);
-				}
-
-				if (s > 0) {
-					r = mid - 1;
-				}
-				else if (s < 0) {
-					l = mid + 1;
-				}
-				else {
-					cout << v[i] << " " << v[mid] << " " << v[j];
-
-					return 0;
-				}
+			if (s > 0) j--;
+			else if (s < 0) i++;
+			else {
+				cout << v[k] << " " << v[i] << " " << v[j];
+				return 0;
 			}
 		}
 	}
