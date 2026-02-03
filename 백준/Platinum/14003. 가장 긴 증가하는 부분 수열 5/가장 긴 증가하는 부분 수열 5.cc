@@ -18,9 +18,11 @@ int main() {
 		cin >> v[i];
 	}
 
+	vector<pair<int, int>> log;
+	log.reserve(n);
+
 	int ans = 0;
 	a[0] = -INF;
-	vector<pair<int, int>> log;
 	for (int i = 0; i < v.size(); i++) {
 		int l = 0;
 		int r = ans;
