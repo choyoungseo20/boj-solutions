@@ -1,6 +1,5 @@
 #include <iostream>
 #include <vector>
-#include <algorithm>
 
 using namespace std;
 
@@ -14,10 +13,9 @@ int main() {
 	cin >> n;
 
 	vector<int> v(n);
-	vector<int> a(n + 1);
+	vector<int> a(n + 1, INF);
 	for (int i = 0; i < n; i++) {
 		cin >> v[i];
-		a[i + 1] = INF;
 	}
 
 	int ans = 0;
