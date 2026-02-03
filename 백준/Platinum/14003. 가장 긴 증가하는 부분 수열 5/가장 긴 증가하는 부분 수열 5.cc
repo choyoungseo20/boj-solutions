@@ -6,9 +6,6 @@ using namespace std;
 
 const int INF = 1234567890;
 
-int ans;
-int a[1000001];
-
 int main() {
 	ios_base::sync_with_stdio(false);
 	cin.tie(nullptr);
@@ -17,13 +14,15 @@ int main() {
 	cin >> n;
 
 	vector<int> v(n);
-	vector<pair<int, int>> log;
+	vector<int> a(n + 1);
 	for (int i = 0; i < n; i++) {
 		cin >> v[i];
 		a[i + 1] = INF;
 	}
 
+	int ans = 0;
 	a[0] = -INF;
+	vector<pair<int, int>> log;
 	for (int i = 0; i < v.size(); i++) {
 		int l = 0;
 		int r = ans;
@@ -45,19 +44,18 @@ int main() {
 		}
 	}
 
-	vector<int> la;
+	vector<int> arr;
 	int idx = ans;
 	for (int i = log.size() - 1; i >= 0; i--) {
 		if (idx == 0) break;
 		if (idx != log[i].first) continue;
-		la.push_back(log[i].second);
+
+		arr.push_back(log[i].second);
 		idx--;
 	}
 
-	reverse(la.begin(), la.end());
-
 	cout << ans << "\n";
-	for (int i = 0; i < ans; i++) {
-		cout << la[i] << " ";
+	for (int i = ans - 1; i >= 0; i--) {
+		cout << arr[i] << " ";
 	}
 }
