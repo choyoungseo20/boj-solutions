@@ -1,38 +1,30 @@
-#include <string>
-#include <vector>
+#include <string> 
+#include <vector> 
+#include <unordered_map> 
+#include <queue> 
 #include <algorithm>
 
-using namespace std;
+using namespace std; 
 
 vector<string> answer;
-bool visited[10000];
+unordered_map<string, priority_queue<string, vector<string>, greater<string>>> um; 
 
-bool dfs(string c, vector<vector<string>>& tickets, int cnt) {
+void dfs(string c) {
+    while (!um[c].empty()) {
+        string n = um[c].top();
+        um[c].pop();
+        dfs(n);
+    }
     answer.push_back(c);
-    
-    if (cnt == tickets.size()) {
-        return true;
-    }
-    for (int i = 0; i < tickets.size(); i++) {
-        if (!visited[i] && tickets[i][0] == c) {
-            visited[i] = true;
-            
-            if (dfs(tickets[i][1], tickets, cnt + 1)) {
-                return true;
-            }
-            
-            visited[i] = false;
-        }
-    }
-    
-    answer.pop_back();
-    return false;
 }
 
-vector<string> solution(vector<vector<string>> tickets) {
-    sort(tickets.begin(), tickets.end());
+vector<string> solution(vector<vector<string>> tickets) { 
+    for (int i = 0; i < tickets.size(); i++) { 
+        um[tickets[i][0]].push(tickets[i][1]); 
+    } 
     
-    dfs("ICN", tickets, 0);
+    dfs("ICN");
+    reverse(answer.begin(), answer.end());
     
-    return answer;
+    return answer; 
 }
